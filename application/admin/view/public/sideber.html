@@ -1,0 +1,43 @@
+<!-- sidebar menu -->
+<div class="sidebar-collapse">
+    <ul class="nav metismenu" id="side-menu">
+        <li class="nav-header">
+            <div class="dropdown profile-element">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <span class="clear">
+                        <span class="block m-t-xs">
+                            <strong class="font-bold">{$admin.username|default=''}</strong>
+                        </span>
+                        <span class="text-muted text-xs block">Welcome!</span>
+                    </span>
+                </a>
+            </div>
+            <div class="logo-element">
+                Admin CP
+            </div>
+        </li>
+        <li class="active"><a href="{:url('/admin')}"><i class="fa fa-th-large"></i> 控制台</a></li>
+        {volist name='sidebar' id='item'}
+        <li>
+            <a href="#">
+                <i class="{$item.icon}"></i>
+                <span class="nav-label">{$item.title}</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse">
+                {volist name='item.child' id='_item'}
+                    <li>
+                        <a href="{:url($_item['url'])}">{$_item.title}</a>
+                    </li>
+                {/volist}
+            </ul>
+        </li>
+        {/volist}
+    </ul>
+</div>
+
+
+
+
+
+<!-- /sidebar menu -->

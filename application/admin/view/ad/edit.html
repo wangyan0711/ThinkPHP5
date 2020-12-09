@@ -1,0 +1,54 @@
+{extend name="admin@public/basic" /}
+{block name="content"}
+
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>广告管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li>
+                <a href="{:url('/admin/guang/guang/'.$ad['position_id'])}">广告列表</a>
+            </li>
+            <li class="active">
+                <strong>编辑图片</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>编辑图片</span>
+                </div>
+                <div class="ibox-content">
+                    <form method="post" action="{:url('/admin/guang/'.$ad['id'])}" class="form-horizontal" enctype="multipart/form-data">
+                        <input type="hidden" name="_method" value="put" />
+                        <div class="form-group"><label class="col-sm-2 control-label">排序：</label>
+                            <div class="col-sm-9"><input type="text" name="category_name" value="{$ad.sort}" class="form-control"></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">图片</label>
+                            <div class="col-sm-9">
+                                <img src="{$ad['image']}" style="width:200px;height: 100px" />
+                                <input type="file" name="image" class="form-control"/></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="submit">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+{/block}

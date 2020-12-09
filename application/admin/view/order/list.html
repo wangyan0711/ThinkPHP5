@@ -1,0 +1,219 @@
+{extend name="admin@public/basic" /}
+
+{block name="content"}
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>商品管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li class="active">
+                <strong>订单列表</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center">
+                    <form role="form" action="{:url('/admin/order')}" class="form-inline" method="get">
+                        <div class="form-group">
+                            <input type="text" placeholder="订单号" name="order_num"
+                                   value="" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="昵称" name="name"
+                                   value="" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" placeholder="下单时间开始" class="form-control" name="date_star"
+                                       id="date_star" value="">
+                            </div>
+                        </div>
+                        <div class="form-group date">
+                            <div class="input-group date">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input type="text" placeholder="下单时间截止" class="form-control "
+                                       value="" name="date_end"
+                                       id="date_end">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="status">
+                                <option value="0"  >订单状态（全部）</option>
+                                <option value="-1"  >未支付</option>
+                                <option value="1"  >待发货</option>
+                                <option value="2"  >已发货</option>
+                                <option value="3"  >已完成</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success" type="submit">搜索</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>订单号</th>
+                            <th>昵称</th>
+                            <th>支付价格</th>
+                            <th>支付状态</th>
+                            <th>支付方式</th>
+                            <th width="250ox;">收货信息</th>
+                            <th>时间</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th width="160">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='list' id='item'}
+                        <tr data-toggle="collapse" data-parent="#accordion" href=".collapseOne-{$item.id}" aria-expanded="true" style="cursor: pointer;" aria-controls="collapseOne-{$item.id}" class="tr-{$item.id}">
+                            <td>{$item.id}</td>
+                            <td>{$item.order_num}</td>
+                            <td>{$item.username}</td>
+                            <td>{$item.pay_price}</td>
+                            <td>
+                                {if($item.pay_status == 1)}
+                                <span style="color: #1AB394;"><span class="fa fa-check"></span></span>
+                                {else/}
+                                <span style="color: red;"><span class="fa fa-times"></span></span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if($item.pay_status == 1)}
+                                    {if($item.pay_way == 1)}
+                                        <span style="color: #1AB394;">PayPal</span>
+                                    {elseif($item.pay_way == 2)/}
+                                        <span style="color: #1AB394;">其它</span>
+                                    {/if}
+                                {else/}
+                                    --
+                                {/if}
+                            </td>
+                            <td>
+                                {$item.province}，{$item.city}，{$item.area}
+                                <div  class="panel-collapse collapse collapseOne-{$item.id}" role="tabpanel" aria-labelledby="collapseOne-{$item.id}">
+                                    <div class="panel-body" style="background: #FFF">
+                                        城市：{$item.province}，{$item.city}，{$item.area}<br/>
+                                        详细地址：{$item.addr}<br/>
+                                        姓名：{$item.name}<br/>
+                                        联系电话：{$item.phone}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                下单时间：{$item.add_time |date="Y-m-d H:i:s"}
+                                <div class="panel-collapse collapse collapseOne-{$item.id}" role="tabpanel" aria-labelledby="collapseOne-{$item.id}">
+                                    <div class="panel-body" style="background: #FFF">
+                                        下单：{if $item.add_time}{$item.add_time |date="Y-m-d H:i:s"}{/if}<br/>
+                                        支付：{if $item.pay_time}{$item.pay_time |date="Y-m-d H:i:s"}{/if}<br/>
+                                        发货：{if $item.fahuo_time}{$item.fahuo_time |date="Y-m-d H:i:s"}{/if}<br/>
+                                        收货：{if $item.shou_time}{$item.shou_time |date="Y-m-d H:i:s"}{/if}<br/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {if $item.type == 1}
+                                    <span class="label label-default radius">商品下单</span>
+                                {elseif $item.type ==2/}
+                                    <span class="label label-primary radius">找货下单</span>
+                                {else/}
+                                    <span class="label label-success radius">批量上传</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item.status == -1}
+                                    <span class="label label-default radius">未支付</span>
+                                {elseif $item.status == 1/}
+                                    <span class="label label-warning radius">待发货</span>
+                                {elseif $item.status == 2/}
+                                    <span class="label label-success radius">已发货</span>
+                                {else/}
+                                    <span class="label label-primary radius">已完成</span>
+                                {/if}
+                            </td>
+                            <td class="caozuo">
+                                {if (permission('order.list')) }
+                                <a class="btn btn-xs btn-success btn-outline" title="查看订单详情"  onclick="goods_info('{$item.id}')"> <span class="fa fa-search"> </span> </a>
+                                {/if}
+                                {if (permission('order.edit')) }
+                                <a class="btn btn-xs {if $item.status == 1} btn-success btn-outline {else/} btn-default {/if} " title="发货"  {if $item.status != 1} disabled="disabled" {else/} onclick="fahuo('{$item.id}')" {/if}> <span class="fa fa-send"> </span> </a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        {$list|raw}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    $(".caozuo").click(function(e){
+        e.stopPropagation();
+    });
+    function goods_info(id) {
+        layer.open({
+            type: 2,
+            title: '订单详情',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['70%', '90%'],
+            content: "/admin/order/"+id
+        });
+    }
+    function fahuo(id) {
+        layer.open({
+            type: 2,
+            title: '订单发货',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['400px', '400px'],
+            content: "/admin/order_fahuo/"+id
+        });
+    }
+
+    laydate({
+        elem: '#date_star',
+        format: 'YYYY-MM-DD hh:mm:ss', //日期格式 // 分隔符可以任意定义，该例子表示只显示年月
+        festival: true, //显示节日
+        istime: true,   //是否显示时分秒
+        istoday: true,
+//是否是今天
+        choose: function (datas) { //选择日期完毕的回调
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas //将结束日的初始值设定为开始日
+        }
+    });
+    laydate({
+        elem: '#date_end',
+        format: 'YYYY-MM-DD hh:mm:ss', //日期格式 // 分隔符可以任意定义，该例子表示只显示年月
+        festival: true, //显示节日
+        istime: true,   //是否显示时分秒
+        istoday: true,
+//是否是今天
+        choose: function (datas) { //选择日期完毕的回调
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas //将结束日的初始值设定为开始日
+        }
+    });
+</script>
+{/block}

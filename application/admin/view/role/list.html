@@ -1,0 +1,70 @@
+{extend name="admin@public/basic" /}
+{block name="content"}
+
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>角色管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li class="active">
+                <strong>角色列表</strong>
+            </li>
+        </ol>
+    </div>
+    {if (permission('role.add')) }
+    <div class="col-lg-2">
+        <h2><a class="btn btn-primary btn-outline" href="{:url('/admin/role/create')}">添加角色</a></h2>
+    </div>
+    {/if}
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>角色</th>
+                            <th>介绍</th>
+                            <th width="120">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='list' id='item'}
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.title}</td>
+                            <td>{$item.description}</td>
+                            <td>
+                                {if (permission('role.edit')) }
+                                <a class="btn btn-primary btn-outline btn-xs" href="{:url('/admin/role/'.$item['id'].'/edit')}" title="编辑"><i class="fa fa-edit"></i></a>
+                                {/if}
+                                {if (permission('role.delete')) }
+                                {if $item.id == 1}
+                                <a class="btn btn-default btn-outline btn-xs disabled" title="删除"><span class="fa fa-trash"></span></a>
+                                {else/}
+                                    <a class="btn btn-danger btn-outline btn-xs" onclick="del('{$item.id}')" title="删除">
+                                    <form name="delete-{$item.id}" action="{:url('admin/role/'.$item['id'])}" method="post"><input type="hidden" name="_method" value="delete"></form>
+                                    <span class="fa fa-trash"></span></a>
+                                {/if}
+                                {/if}
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        {$list|raw}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+

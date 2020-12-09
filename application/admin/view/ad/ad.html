@@ -1,0 +1,61 @@
+{extend name="admin@public/basic" /}
+
+{block name="content"}
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>广告管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li class="active">
+                <strong>广告列表</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>所属广告位</th>
+                            <th>图片</th>
+                            <th>图片尺寸</th>
+                            <th>排序</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='list' id='item'}
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.name}</td>
+                            <td><img src="{$item.image}" style="width:100px;height: 50px;"/></td>
+                            <td>{$item.size}</td>
+                            <td>{$item.sort}</td>
+                            <td>
+                                {if (permission('guang.edit')) }
+                                <a class="btn btn-primary btn-outline btn-xs" href="{:url('/admin/guang/'.$item['id'].'/edit')}" title="编辑"><i class="fa fa-edit"></i></a>
+                                {/if}
+                                {if (permission('guang.delete')) }
+                                <a class="btn btn-danger btn-outline btn-xs" onclick="del('{$item.id}')" title="删除">
+                                    <form name="delete-{$item.id}" action="{:url('admin/guang/'.$item['id'])}" method="post"><input type="hidden" name="_method" value="delete"></form>
+                                    <span class="fa fa-trash"></span></a>
+                                {/if}</td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+

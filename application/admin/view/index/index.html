@@ -1,0 +1,129 @@
+{extend name="admin@public/basic" /}
+
+{block name="content"}
+        <!-- page content -->
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+
+                    <h5>总销售额</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">￥{$sell_price}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+
+                    <h5>网站流量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$click_num}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+
+                    <h5>会员数量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$user_num}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>订单数量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$order_num}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>商品数量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$goods_num}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>需求数量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$find_num}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>在线订单转换率</h5>
+        </div>
+        <div class="ibox-content no-padding">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <p>已添加到购物车<span style="margin-left: 200px;">{$car_rate}%</span></p>
+                    <small class="block text-muted"> {$car_num}</small>
+                </li>
+                <li class="list-group-item">
+                    <p>达到结账<span style="margin-left: 200px;">{$sell_rate}%</span></p>
+                    <small class="block text-muted"> {$order_num}</small>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row border-bottom white-bg dashboard-header">
+        <div class="col-sm-3">
+            <h2>新会员</h2>
+            <small>最近10条数据</small>
+            <ul class="list-group clear-list m-t">
+                {volist name='user' id='item'}
+                    <li class="list-group-item fist-item">
+                        <span class="pull-right">{:date('Y-m-d H:i:s',$item['create_time'])}</span>
+                        <span class="label label-primary">{$i}</span>{$item.name}
+                    </li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+            <h2>热销产品</h2>
+            <small>排名前10条数据</small>
+            <ul class="list-group clear-list m-t">
+                {volist name='goods' id='item'}
+                <li class="list-group-item fist-item">
+                    <span class="pull-right">{$item.sell_num}</span>
+                    <span class="label label-primary">{$i}</span>{$item.name}
+                </li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+</div>
+        <!-- /page content -->
+
+
+{/block}
+
+{block name="script"}
+<!-- Flot -->
+<script>
+    setInterval("jnkc.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
+</script>
+
+
+{/block}

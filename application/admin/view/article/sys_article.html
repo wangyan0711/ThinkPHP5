@@ -1,0 +1,63 @@
+{extend name="admin@public/basic" /}
+
+{block name="content"}
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>文章管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li>
+                <a href="{:url('/admin/article')}">文章列表</a>
+            </li>
+            <li class="active">
+                <strong>系统文章</strong>
+            </li>
+        </ol>
+    </div>
+    <!--    {if (permission('article.add')) }-->
+    <!--    <div class="col-lg-2">-->
+    <!--        <h2><a class="btn btn-primary btn-outline" href="{:url('/admin/article/create')}">添加文章</a></h2>-->
+    <!--    </div>-->
+    <!--    {/if}-->
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>文章标题</th>
+                            <th>英文标题</th>
+                            <th>文章分类</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='list' id='item'}
+                        <tr>
+                            <td>{$item.id}</td>
+                            <td>{$item.title}</td>
+                            <td>{$item.english_title}</td>
+                            <td>{$item.type_name}</td>
+                            <td>
+                                {if (permission('article.edit')) }
+                                <a class="btn btn-primary btn-outline btn-xs" href="{:url('/admin/article/'.$item['id'].'/edit')}" title="编辑"><span class="fa fa-edit"></span></a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+

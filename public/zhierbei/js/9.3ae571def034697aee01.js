@@ -1,0 +1,2 @@
+webpackJsonp([9],{Rxv8:function(t,e){},nbI3:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r={render:function(){var t=this.$createElement;return(this._self._c||t)("div",{})},staticRenderFns:[]};var u=n("VU/8")({data:function(){return{}},created:function(){},mounted:function(){this.$router.push({path:"list",query:{title:"官方商城",key:this.$route.query.key}})},watch:{},methods:{},components:{}},r,!1,function(t){n("Rxv8")},"data-v-c8213a82",null);e.default=u.exports}});
+//# sourceMappingURL=9.3ae571def034697aee01.js.map

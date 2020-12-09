@@ -1,0 +1,142 @@
+{extend name="admin@public/basic" /}
+{block name="content"}
+
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>角色管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li>
+                <a href="{:url('/admin/role')}">角色列表</a>
+            </li>
+            <li class="active">
+                <strong>添加角色</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>添加一个角色</span>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" class="form-horizontal" id="form">
+
+                        <div class="form-group"><label class="col-sm-2 control-label">角色名称</label>
+                            <div class="col-sm-9"><input type="text" name="title" class="form-control"></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">角色介绍</label>
+                            <div class="col-sm-9">
+                                <textarea name="description" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">权限管理</label>
+                            <div class="col-sm-9">
+                                <br/>
+                                {foreach $permissions as $key => $item}
+                                <dl class="permission-list" style="border-bottom: 1px solid #EAEAEA">
+                                    <dd style="display: block">
+                                        <dl class="cl permission-list2">
+                                            <dt style="display: block; float: left; width: 160px">
+                                                <label class=""><input type="checkbox" id="{$key}"> &nbsp;{$key} <br/>({$key|permission_config})</label>
+                                            </dt>
+                                            <dd style="display: block; float: left;">
+                                                {foreach $item as $_key => $_item}
+                                                <label style="width: 120px" class="">
+                                                    <input type="checkbox" value="{$_item['id']}" name="rules[]" id="{$key}-{$_item['id']}">
+                                                    {$_item['title']}({$_item['name']})</label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                                {/foreach}
+                                            </dd>
+                                            <div style="clear: both"></div>
+                                        </dl>
+                                    </dd>
+                                </dl>
+                                {/foreach}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <a class="btn btn-primary" type="submit" id="sub">提交</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+
+<script>
+    $(function(){
+        $(".permission-list dt input:checkbox").click(function(){
+            $(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+        });
+        $(".permission-list2 dd input:checkbox").click(function(){
+            var l =$(this).parent().parent().find("input:checked").length;
+            var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+            if($(this).prop("checked")){
+                $(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+                $(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+            }
+            else{
+                if(l==0){
+                    $(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+                }
+                if(l2==0){
+                    $(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+                }
+            }
+        });
+
+    });
+</script>
+
+
+<script>
+    $("#sub").click(function () {
+        var arry = new Array();
+        //循环所有选中的值
+        $('input[name="rules[]"]:checked').each(function(index, element) {
+            //追加到数组中
+            arry.push($(this).val());
+        });
+        //将数组元素连接起来转化为字符串
+        var rules = arry.join(',');
+        var title = $("*[name='title']").val();
+        var description = $("*[name='description']").val();
+        $.ajax({
+            type: "post",
+            data: {title:title, description:description, rules:rules},
+            url: "{:url('/admin/role')}",
+            beforeSend: function () {
+                layer.load(0);
+            },
+            success: function (res) {
+                if(res.code!=0){
+                    layer.alert(res.msg);
+                }else{
+                    layer.msg(res.msg, {icon:1});
+                }
+            },
+            complete: function () {
+                //完成响应
+                layer.closeAll('loading');
+                $('.btn').attr('disabled', false)
+            },
+            error: function (res) {
+                layer.alert('系统异常')
+            }
+        });
+    })
+</script>
+{/block}

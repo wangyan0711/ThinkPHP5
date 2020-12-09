@@ -1,0 +1,128 @@
+
+{extend name="admin@public/header" /}
+{block name="content"}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-12">
+        <h2>订单详情</h2>
+        <div class="col-lg-4">
+            <div class="ibox-content">
+                <h3>收货信息：</h3>
+                <p>
+                    城市：{$order_info.province}，{$order_info.city}，{$order_info.area}<br/>
+                    姓名：{$order_info.name}<br/>
+                    联系电话：{$order_info.phone}<br/>
+                    详细地址：<br/>{$order_info.addr}
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox-content">
+                <h3>订单状态：</h3>
+                {if($order_info.status == -1)}
+                <span class="label label-default radius">未支付</span>
+                {elseif($order_info.status == 1)/}
+                <span class="label label-warning radius">待发货</span>
+                {elseif($order_info.status == 2)/}
+                <span class="label label-success radius">已发货</span>
+                {elseif($order_info.status == 3)/}
+                <span class="label label-primary radius">已完成</span>
+                {/if}
+                <br>
+                <br>
+                <h3>时间：</h3>
+                下单：{if $order_info.add_time}{:date('Y-m-d H:i:s',$order_info['add_time'])}{/if}<br/>
+                支付：{if $order_info.pay_time}{:date('Y-m-d H:i:s',$order_info['pay_time'])}{/if}<br/>
+                发货：{if $order_info.fahuo_time}{:date('Y-m-d H:i:s',$order_info['fahuo_time'])}{/if}<br/>
+                收货：{if $order_info.shou_time}{:date('Y-m-d H:i:s',$order_info['shou_time'])}{/if}<br/>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="ibox-content">
+                {if (permission('order.edit')) }
+                {if($order_info.status == 1)}
+                <h3>订单操作：</h3>
+                <p>
+                    <button class="btn btn-outline btn-primary" onclick="fahuo('{$order_info.id}')">发货</button>
+                </p>
+                {/if}
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <p>订单号：{$order_info.order_num}，金额：{$order_info.pay_price}</p>
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>编号</th>
+                            <th>商品详情</th>
+                            <th>属性</th>
+                            <th>单价</th>
+                            <th>数量</th>
+                            <th>状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name='goods_order_list' id='item'}
+                        <tr>
+                            <td>{$item.id }</td>
+                            <td>{$item.order_goods_number}</td>
+                            <td class="text-l">
+                                <a href="#">
+                                    {if $item.goods_thumb}
+                                    <img src="{$item.goods_thumb}" style="width: 50px; height: 50px; display: block; float: left;margin-right: 10px;">
+                                    {/if}
+                                    <span style="display: block;width: 300px;height:35px; float: left;"> {$item.goods_name}</span>
+                                </a>
+                            </td>
+                            <td>{$item.attr}</td>
+                            <td>{$item.price}</td>
+                            <td>X{$item.num}</td>
+                            <td>
+                                {if($item.status == -1)}
+                                <span class="label label-default radius">未支付</span>
+                                {elseif($item.status == 1)/}
+                                <span class="label label-warning radius">待发货</span>
+                                {elseif($item.status == 2)/}
+                                <span class="label label-success radius">已发货</span>
+                                {elseif($item.status == 3)/}
+                                <span class="label label-primary radius">已完成</span>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{/block}
+{block name="script"}
+<script>
+
+    function fahuo(id) {
+        layer.open({
+            type: 2,
+            title: '订单发货',
+            shadeClose: false,
+            shade: 0.8,
+            area: ['400px', '400px'],
+            content: "/admin/order_fahuo/"+id
+        });
+    }
+
+
+</script>
+{/block}
+
+

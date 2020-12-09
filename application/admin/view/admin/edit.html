@@ -1,0 +1,90 @@
+{extend name="admin@public/basic" /}
+{block name="content"}
+
+<!-- page content -->
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>菜单管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{:url('/admin')}">控制台</a>
+            </li>
+            <li>
+                <a href="{:url('/admin/admin')}">管理员列表</a>
+            </li>
+            <li class="active">
+                <strong>编辑管理员</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span>编辑管理员</span>
+                </div>
+                <div class="ibox-content">
+                    <form method="get" class="form-horizontal">
+                        <div class="form-group"><label class="col-sm-2 control-label">管理员名称</label>
+                            <div class="col-sm-9"><input type="text" name="username" value="{$admin_info.username}" class="form-control"></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">管理员密码</label>
+                            <div class="col-sm-9"><input type="text" name="password" class="form-control"><span>*不修改请留空</span></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">选择角色</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" name="group_id" >
+                                    {foreach $group_list as $v}
+                                    <option value="{$v['id']}" {if($admin_info['group_id'] == $v['id'])} selected="selected" {/if} >{$v['title']}</option>
+                                    {/foreach}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <a class="btn btn-primary" type="submit" id="sub">提交</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script>
+    $("#sub").click(function () {
+        var username = $("*[name='username']").val();
+        var password = $("*[name='password']").val();
+        var group_id = $("*[name='group_id']").val();
+        $.ajax({
+            type: "put",
+            data: {username:username, password:password, group_id:group_id},
+            url: "{:url('/admin/admin/'.$admin_info['id'])}",
+            beforeSend: function () {
+                layer.load(0);
+            },
+            success: function (res) {
+                if(res.code!=0){
+                    layer.alert(res.msg);
+                }else{
+                    layer.msg(res.msg, {icon:1});
+                }
+            },
+            complete: function () {
+                //完成响应
+                layer.closeAll('loading');
+                $('.btn').attr('disabled', false)
+            },
+            error: function (res) {
+                layer.alert('系统异常')
+            }
+        });
+    })
+</script>
+{/block}
